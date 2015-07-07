@@ -124,6 +124,29 @@ config CPU_FREQ_DEFAULT_GOV_SMARTMAX_EPS
         help
           Use the CPUFreq governor 'smartmax eps' as default
 
+config CPU_FREQ_DEFAULT_GOV_IMPULSE
+	bool "impulse"
+	select CPU_FREQ_GOV_IMPULSE
+	help
+	  Use the CPUFreq governor 'impulse' as default.
+	  
+config CPU_FREQ_DEFAULT_GOV_INTELLIACTIVE
+  bool "intelliactive"
+  select CPU_FREQ_GOV_INTELLIACTIVE
+    
+config CPU_FREQ_DEFAULT_GOV_YANKACTIVE
+	bool "yankactive"
+	select CPU_FREQ_GOV_YANKACTIVE
+	help
+	  Use the CPUFreq governor 'yankactive' as default. This allows
+	  you to get a full dynamic cpu frequency capable system by simply
+	  loading your cpufreq low-level hardware driver, using the
+	  'yankactive' governor for latency-sensitive workloads.
+
+config CPU_FREQ_DEFAULT_GOV_DARKNESS
+	bool "darkness"
+	select CPU_FREQ_GOV_DARKNESS	  
+
 endchoice
 
 config CPU_FREQ_GOV_PERFORMANCE
@@ -228,6 +251,15 @@ config CPU_FREQ_GOV_SMARTMAX_EPS
         help
           'smartmax EPS' is the extreme powersaving version of smartmax
 
+config CPU_FREQ_GOV_IMPULSE
+	tristate "'impulse' cpufreq policy governor"
+	depends on CPU_FREQ
+	help
+    'impulse' - This driver adds a dynamic cpufreq policy governor
+    designed for optimized balance between power and performance.
+
+    If in doubt, say N.
+
 config CPU_BOOST
 	tristate "Event base short term CPU freq boost"
 	depends on CPU_FREQ
@@ -238,7 +270,24 @@ config CPU_BOOST
 	  - Migration of important threads from one CPU to another.
 
 	  If in doubt, say N.
+	  
+config CPU_FREQ_GOV_INTELLIACTIVE
+	tristate "'intelliactive' cpufreq governor"
+	depends on CPU_FREQ
 
+config CPU_FREQ_GOV_YANKACTIVE
+	tristate "'yankactive' cpufreq policy governor"
+	help
+	  'yankactive' - This driver adds a dynamic cpufreq policy governor
+	  designed for latency-sensitive workloads.
+
+	  The governor is based on interactive with just different default settings
+	  and can be achieved using interactive with a script. This is added for
+	  simplification purposes for myself.
+
+config CPU_FREQ_GOV_DARKNESS
+	tristate "'darkness' cpufreq policy governor"	  
+	  
 config GENERIC_CPUFREQ_CPU0
 	tristate "Generic CPU0 cpufreq driver"
 	depends on HAVE_CLK && REGULATOR && PM_OPP && OF
