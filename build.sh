@@ -13,12 +13,12 @@
  # GNU General Public License for more details.
  #
  # Please maintain this if you use this script or any part of it
- # 
- # AR_Beast kernel Build script
+ #
+ # Flex_Kernel  Build script
 KERNEL_DIR=$PWD
 KERN_IMG=$KERNEL_DIR/arch/arm64/boot/Image
 DTBTOOL=$KERNEL_DIR/tools/dtbToolCM
-FINAL_KERNEL_ZIP=Alienkernel-$(date +"%Y%m%d-%T")-tomato.zip
+FINAL_KERNEL_ZIP=Flex_Kernel_$(date +"%d-%m-%Y")-tomato.zip
 ZIP_MAKER_DIR=$KERNEL_DIR/anykernel
 VERSION=7
 
@@ -29,21 +29,21 @@ yellow='\033[0;33m'
 red='\033[0;31m'
 nocol='\033[0m'
 
-export CROSS_COMPILE="/home/dhirendra/rr/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-android-"
+export CROSS_COMPILE="/home/creator54/Desktop/kernel_dev/toolchain-ubertc/bin/aarch64-linux-android-"
 export ARCH=arm64
 export SUBARCH=arm64
-export KBUILD_BUILD_USER="alienabhishek"
-export KBUILD_BUILD_HOST="frictionless_machine"
-#STRIP="/home/abhishek/UBERTC/bin/aarch64-linux-android-strip"
+export KBUILD_BUILD_USER="Creator54"
+export KBUILD_BUILD_HOST="Zorin"
+#STRIP="/home/creator54/Desktop/kernel_dev/toolchain-ubertc/bin"
 #MODULES_DIR=$KERNEL_DIR/drivers/staging/prima/
 
 compile_kernel ()
 {
 echo -e "$blue***********************************************"
-echo "          Compiling AR_Beast™          "
+echo "          Compiling Flex™ Kernel           "
 echo -e "***********************************************$nocol"
 rm -f $KERN_IMG
-make lineageos_tomato_defconfig  -j$(nproc --all)
+make flex_tomato_defconfig  -j$(nproc --all)
 make Image -j$(nproc --all)
 #make modules -j$(nproc --all)
 make dtbs -j$(nproc --all)
@@ -57,10 +57,10 @@ $DTBTOOL -2 -o $KERNEL_DIR/arch/arm64/boot/dt.img -s 2048 -p $KERNEL_DIR/scripts
 
 case $1 in
 clean)
-make ARCH=arm64 -j4 clean mrproper
+make ARCH=arm64 -j16 clean mrproper
 ;;
 dt)
-make lineageos_tomato_defconfig -j$(nproc --all)
+make flex_tomato_defconfig -j$(nproc --all)
 $DTBTOOL -2 -o $KERNEL_DIR/arch/arm64/boot/dt.img -s 2048 -p $KERNEL_DIR/scripts/dtc/ $KERNEL_DIR/arch/arm/boot/dts/
 ;;
 *)
