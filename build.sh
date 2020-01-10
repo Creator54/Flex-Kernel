@@ -13,13 +13,12 @@
  # GNU General Public License for more details.
  #
  # Please maintain this if you use this script or any part of it
- # 
- # AR_Beast kernel Build script
-KERNEL_DIR=$PWD
-KERN_IMG=$KERNEL_DIR/arch/arm64/boot/Image
-DTBTOOL=$KERNEL_DIR/tools/dtbToolCM
-FINAL_KERNEL_ZIP=Alienkernel-$(date +"%Y%m%d-%T")-tomato.zip
-ZIP_MAKER_DIR=$KERNEL_DIR/anykernel
+ #
+ # Flex_Kernel  Build script
+KERN_IMG=$PWD/arch/arm64/boot/Image
+DTBTOOL=$PWD/tools/dtbToolCM
+FINAL_KERNEL_ZIP=Flex_Kernel_$(date +"%d-%m-%Y")-tomato.zip
+ZIP_MAKER_DIR=$PWD/anykernel
 VERSION=7
 
 BUILD_START=$(date +"%s")
@@ -29,18 +28,16 @@ yellow='\033[0;33m'
 red='\033[0;31m'
 nocol='\033[0m'
 
-export CROSS_COMPILE="/home/dhirendra/rr/prebuilts/gcc/linux-x86/aarch64/aarch64-linux-android-4.9/bin/aarch64-linux-android-"
+export CROSS_COMPILE="/mnt/home/chronos/toolchain/bin/aarch64-linux-android-"
 export ARCH=arm64
 export SUBARCH=arm64
-export KBUILD_BUILD_USER="alienabhishek"
-export KBUILD_BUILD_HOST="frictionless_machine"
-#STRIP="/home/abhishek/UBERTC/bin/aarch64-linux-android-strip"
-#MODULES_DIR=$KERNEL_DIR/drivers/staging/prima/
+export KBUILD_BUILD_USER="Creator54"
+export KBUILD_BUILD_HOST="Cloud"
 
 compile_kernel ()
 {
 echo -e "$blue***********************************************"
-echo "          Compiling AR_Beast™          "
+echo "          Compiling Flex™ Kernel           "
 echo -e "***********************************************$nocol"
 rm -f $KERN_IMG
 make lineageos_tomato_defconfig  -j$(nproc --all)
@@ -52,7 +49,7 @@ then
 echo -e "$red Kernel Compilation failed! Fix the errors! $nocol"
 exit 1
 fi
-$DTBTOOL -2 -o $KERNEL_DIR/arch/arm64/boot/dt.img -s 2048 -p $KERNEL_DIR/scripts/dtc/ $KERNEL_DIR/arch/arm/boot/dts/
+$DTBTOOL -2 -o $PWD/arch/arm64/boot/dt.img -s 2048 -p $PWD/scripts/dtc/ $PWD/arch/arm/boot/dts/
 }
 
 case $1 in
@@ -61,7 +58,7 @@ make ARCH=arm64 -j4 clean mrproper
 ;;
 dt)
 make lineageos_tomato_defconfig -j$(nproc --all)
-$DTBTOOL -2 -o $KERNEL_DIR/arch/arm64/boot/dt.img -s 2048 -p $KERNEL_DIR/scripts/dtc/ $KERNEL_DIR/arch/arm/boot/dts/
+$DTBTOOL -2 -o $PWD/arch/arm64/boot/dt.img -s 2048 -p $PWD/scripts/dtc/ $PWD/arch/arm/boot/dts/
 ;;
 *)
 compile_kernel
@@ -75,14 +72,14 @@ echo "**** Verifying ZIP MAKER Directory ****"
 echo "**** Removing leftovers ****"
 rm -rf $ZIP_MAKER_DIR/tools/dt.img
 rm -rf $ZIP_MAKER_DIR/tools/Image
-#rm -rf $ZIP_MAKER_DIR/system/lib/modules/wlan.ko
+rm -rf $ZIP_MAKER_DIR/system/lib/modules/wlan.ko
 
 echo "**** Copying Image ****"
-cp $KERNEL_DIR/arch/arm64/boot/Image $ZIP_MAKER_DIR/tools/
+cp $PWD/arch/arm64/boot/Image $ZIP_MAKER_DIR/tools/
 echo "**** Copying dtb ****"
-cp $KERNEL_DIR/arch/arm64/boot/dt.img $ZIP_MAKER_DIR/tools/
+cp $PWD/arch/arm64/boot/dt.img $ZIP_MAKER_DIR/tools/
 #echo "**** Copying modules ****"
-#cp $KERNEL_DIR/drivers/staging/prima/wlan.ko $ZIP_MAKER_DIR/system/lib/modules/
+cp $PWD/drivers/staging/prima/wlan.ko $ZIP_MAKER_DIR/system/lib/modules/
 
 echo "**** Time to zip up! ****"
 cd $ZIP_MAKER_DIR/
@@ -91,4 +88,3 @@ zip -r9 $FINAL_KERNEL_ZIP * -x $FINAL_KERNEL_ZIP
 esac
 
 echo "**** Good Bye!! ****"
-
