@@ -90,5 +90,9 @@ zip -r9 $FINAL_KERNEL_ZIP * -x $FINAL_KERNEL_ZIP
 ;;
 esac
 
+rm -rf $ZIP_MAKER_DIR/tools/Image
+rm -rf $ZIP_MAKER_DIR/tools/dt.img
+rm -rf $KERNEL_DIR//arch/arm64/boot/dt.img
+
 echo "**** Good Bye!! ****"
 
