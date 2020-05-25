@@ -18,7 +18,7 @@
 KERN_IMG=$PWD/arch/arm64/boot/Image
 DTBTOOL=$PWD/tools/dtbToolCM
 FINAL_KERNEL_ZIP=Flex_Kernel_$(date +"%d-%m-%Y")-tomato.zip
-ZIP_MAKER_DIR=$PWD/anykernel
+ZIP_MAKER_DIR=$PWD
 VERSION=7
 
 BUILD_START=$(date +"%s")
@@ -72,14 +72,11 @@ echo "**** Verifying ZIP MAKER Directory ****"
 echo "**** Removing leftovers ****"
 rm -rf $ZIP_MAKER_DIR/tools/dt.img
 rm -rf $ZIP_MAKER_DIR/tools/Image
-rm -rf $ZIP_MAKER_DIR/system/lib/modules/wlan.ko
 
 echo "**** Copying Image ****"
 cp $PWD/arch/arm64/boot/Image $ZIP_MAKER_DIR/tools/
 echo "**** Copying dtb ****"
 cp $PWD/arch/arm64/boot/dt.img $ZIP_MAKER_DIR/tools/
-#echo "**** Copying modules ****"
-cp $PWD/drivers/staging/prima/wlan.ko $ZIP_MAKER_DIR/system/lib/modules/
 
 echo "**** Time to zip up! ****"
 cd $ZIP_MAKER_DIR/
