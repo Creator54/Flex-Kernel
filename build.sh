@@ -32,7 +32,7 @@ export CROSS_COMPILE="/mnt/home/chronos/toolchain/bin/aarch64-linux-android-"
 export ARCH=arm64
 export SUBARCH=arm64
 export KBUILD_BUILD_USER="Creator54"
-export KBUILD_BUILD_HOST="Cloud"
+export KBUILD_BUILD_HOST="cloud"
 
 compile_kernel ()
 {
@@ -42,7 +42,7 @@ echo -e "***********************************************$nocol"
 rm -f $KERN_IMG
 make lineageos_tomato_defconfig  -j$(nproc --all)
 make Image -j$(nproc --all)
-#make modules -j$(nproc --all)
+make modules -j$(nproc --all)
 make dtbs -j$(nproc --all)
 if ! [ -a $KERN_IMG ];
 then
@@ -54,7 +54,7 @@ $DTBTOOL -2 -o $PWD/arch/arm64/boot/dt.img -s 2048 -p $PWD/scripts/dtc/ $PWD/arc
 
 case $1 in
 clean)
-make ARCH=arm64 -j4 clean mrproper
+make ARCH=arm64 -j$(nproc --all) clean mrproper
 ;;
 dt)
 make lineageos_tomato_defconfig -j$(nproc --all)
@@ -78,7 +78,7 @@ echo "**** Copying Image ****"
 cp $PWD/arch/arm64/boot/Image $ZIP_MAKER_DIR/tools/
 echo "**** Copying dtb ****"
 cp $PWD/arch/arm64/boot/dt.img $ZIP_MAKER_DIR/tools/
-#echo "**** Copying modules ****"
+echo "**** Copying modules ****"
 cp $PWD/drivers/staging/prima/wlan.ko $ZIP_MAKER_DIR/system/lib/modules/
 
 echo "**** Time to zip up! ****"
